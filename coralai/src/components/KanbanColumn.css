@@ -4,59 +4,45 @@
   padding: 1rem;
   overflow-y: auto;
   max-height: 70vh;
-  background-color: rgba(255, 255, 255, 0.8); /* Light background to make colors softer */
+  margin: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.8); 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
 }
 
 .kanban-column h2 {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: #ffffff;
   padding: 0.75rem;
   border-radius: 6px;
   text-align: center;
   margin-bottom: 0.5rem;
+  text-shadow: -1px -1px 0 #565656, 1px -1px 0 #565656, -1px 1px 0 #565656, 1px 1px 0 #565656;
+
 }
 
-/* Column Colors with Reduced Opacity */
+/* Column Colors with Subtle Gradients */
 .kanban-column[data-status="To Do"] {
-  background-color: rgba(255, 235, 59, 0.85);
+  background: linear-gradient(to bottom right, rgba(255, 232, 21, 0.881), rgba(255, 210, 61, 0.85));
 }
 
 .kanban-column[data-status="In Progress"] {
-  background-color: rgba(3, 169, 244, 0.85);
+  background: linear-gradient(to bottom right, rgba(3, 169, 244, 0.85), rgba(2, 136, 209, 0.85));
 }
 
 .kanban-column[data-status="Blocked"] {
-  background-color: rgba(244, 67, 54, 0.85);
+  background: linear-gradient(to bottom right, rgba(244, 67, 54, 0.85), rgba(211, 47, 47, 0.85));
 }
 
 .kanban-column[data-status="Done"] {
-  background-color: rgba(76, 175, 80, 0.85);
+  background: linear-gradient(to bottom right, rgba(76, 175, 80, 0.85), rgba(56, 142, 60, 0.85));
 }
 
-/* Ticket Styles */
-.ticket {
-  padding: 1.2rem;
-  background-color: #ffffff;
-  border-radius: 6px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-}
-
-.ticket:hover {
-  transform: scale(1.02);
-}
-
-.ticket h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem;
-  color: #333;
-}
-
-.ticket p {
-  font-size: 0.875rem;
-  color: #555;
-  line-height: 1.5;
-  margin: 0;
+/* Ticket List */
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
 }

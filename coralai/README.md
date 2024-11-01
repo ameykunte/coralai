@@ -1,70 +1,147 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Kanban Dashboard Documentation
 
-## Available Scripts
+### Overview
 
-In the project directory, you can run:
+The Kanban Dashboard is a web application that allows users to manage tasks organized into columns representing different statuses: "To Do," "In Progress," "Blocked," and "Done." The application includes features like drag-and-drop reordering, Live Mode for automatic ticket transitions, lazy loading, and styling enhancements for a polished user experience.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Task Management**: Organize tasks by moving them between columns.
+- **Drag-and-Drop**: Drag tasks between columns to update their statuses.
+- **Live Mode**: Automatically transition tasks between statuses at regular intervals.
+- **Supports Up to 10,000 Tasks**: Initial load of 10,000 tasks with optimizations for performance.
+- **Lazy Loading & Virtualization**: Only render tasks within view to enhance performance.
+- **Polished UI**: Clear, professional interface with color-coded columns, responsive design, and custom styling.
+  
+---
 
-### `npm test`
+## Setup Instructions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+- **Node.js** (version 14 or later)
+- **npm** (Node Package Manager)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installation Steps
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd kanban-dashboard
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-### `npm run eject`
+3. **Run the Application**
+   ```bash
+   npm start
+   ```
+   - The app should open at [http://localhost:3000](http://localhost:3000).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Build for Production
+To create a production build:
+```bash
+npm run build
+```
+This will generate an optimized build in the `build` directory.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Code Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+kanban-dashboard/
+└── src/
+    ├── components/
+    │   ├── Header.js               # Header with Live Mode toggle and Clear All Done button
+    │   ├── Header.css              # Styling for Header component
+    │   ├── KanbanBoard.js          # Main board containing columns
+    │   ├── KanbanBoard.css         # Styling for KanbanBoard component
+    │   ├── KanbanColumn.js         # Column component for each task status
+    │   ├── KanbanColumn.css        # Styling for KanbanColumn component
+    │   ├── Ticket.js               # Individual task ticket component
+    │   ├── Ticket.css              # Styling for Ticket component
+    │   ├── LoadingSpinner.js       # Loading spinner displayed during initial load
+    │   └── LoadingSpinner.css      # Styling for LoadingSpinner
+    ├── hooks/                      
+    │   └── useFakeTicketTransition.js  # Hook for Live Mode ticket transition effect
+    ├── utils/                      
+    │   ├── generateTickets.js      # Generates ticket data with Faker
+    │   └── fsa.js                  # Finite State Automaton for valid status transitions
+    ├── App.js                      # Main application component
+    ├── App.css                     # Global styling for the app
+    ├── index.js                    # Entry point for React
+    └── index.css                   # Styling for index HTML
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Detailed Feature Explanation
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 1. Drag-and-Drop
 
-### Code Splitting
+- **Library**: `@hello-pangea/dnd` is used for the drag-and-drop functionality.
+- **Implementation**: Tasks (tickets) are wrapped in `Draggable` components, and columns are wrapped in `Droppable` components.
+- **Usage**: Drag a task to another column to update its status.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 2. Live Mode
 
-### Analyzing the Bundle Size
+- **Functionality**: When enabled, tasks automatically transition between statuses according to defined rules.
+- **Implementation**: 
+  - The `useEffect` hook in `App.js` checks if Live Mode is enabled and then periodically updates task statuses.
+  - Status transitions follow rules defined in `fsa.js`.
+- **Toggle**: Controlled via the "Live Mode" checkbox in the header.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 3. Lazy Loading & Virtualization
 
-### Making a Progressive Web App
+- **Library**: `react-window` is used for virtualized rendering, which loads only the visible tasks on screen.
+- **Implementation**:
+  - The `FixedSizeList` component in `react-window` is utilized in `KanbanColumn.js`.
+  - This optimization ensures smoother performance, even with large numbers of tasks.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 4. Data Generation
 
-### Advanced Configuration
+- **Library**: Faker.js is used to generate sample data for tasks.
+- **Implementation**:
+  - `generateTickets.js` generates tasks with randomized titles, descriptions, and statuses.
+  - The function supports generating large datasets up to 10,000 tickets.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 5. Clear All Done Button
 
-### Deployment
+- **Functionality**: Allows users to quickly remove all tasks marked as "Done."
+- **Implementation**: The button in `Header.js` triggers a function that filters out tasks with "Done" status.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## Styling Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Column Colors**: Each column is color-coded to represent its status, with translucent backgrounds and subtle gradients.
+- **Text Styling**: Headings in columns have a simulated 1px black border effect around the text using `text-shadow`.
+- **Hover Effects**: Tickets have subtle scaling and shadow effects on hover for a more interactive feel.
+
+---
+
+## Known Limitations & Future Improvements
+
+- **Performance with Extremely Large Datasets**: While optimized for up to 10,000 tasks, performance could be further improved for datasets beyond this range.
+- **Additional Customization**: Adding user preferences for Live Mode intervals or custom status labels could enhance the flexibility of the dashboard.
+
+---
+
+## Troubleshooting
+
+- **Slow Loading**: Ensure `react-window` is properly implemented for virtualized rendering to handle large numbers of tickets.
+- **Live Mode Not Working**: Verify that the `useEffect` in `App.js` is properly setting intervals for status transitions and that dependencies are up-to-date.
+- **Drag-and-Drop Not Functioning**: Confirm that all `Droppable` and `Draggable` components are correctly configured.
+
+---
+
+## Conclusion
+
+This Kanban Dashboard provides a robust platform for managing tasks with features like drag-and-drop, Live Mode, and support for large data sets. With a focus on user experience, performance, and responsiveness, this app can handle up to 10,000 tasks smoothly while offering a polished, professional interface.

@@ -1,42 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Droppable } from '@hello-pangea/dnd';
+import { FixedSizeList as List } from 'react-window';
 import Ticket from './Ticket';
 import './KanbanColumn.css';
 
-const KanbanColumn = ({ status, tickets }) => {
-  const [visibleTickets, setVisibleTickets] = useState([]);
-  const [batchSize, setBatchSize] = useState(20);
-
-  const loadMoreTickets = () => {
-    setVisibleTickets(prev => [
-      ...prev, 
-      ...tickets.slice(prev.length, prev.length + batchSize)
-    ]);
-  };
+const KanbanColumn = ({ status, tickets, loadMoreTickets }) => {
+  const listRef = useRef(null);
 
   useEffect(() => {
-    setVisibleTickets(tickets.slice(0, batchSize));
-  }, [tickets, batchSize]);
+    const handleScroll = () => {
+      if (listRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+        if (scrollHeight - scrollTop <= clientHeight + 50) {
+          loadMoreTickets();
+        }
+      }
+    };
+
+    if (listRef.current) {
+      listRef.current.addEventListener('scroll', handleScroll);
+      return () => listRef.current.removeEventListener('scroll', handleScroll);
+    }
+  }, [loadMoreTickets]);
 
   return (
-    <div className="kanban-column" data-status={status} onScroll={(e) => {
-      if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
-        loadMoreTickets();
-      }
-    }}>
-      <h2>{status} ({tickets.length})</h2>
-      <div className="ticket-list">
-        {visibleTickets.map(ticket => (
-          <Ticket key={ticket.id} title={ticket.title} description={ticket.description} />
-        ))}
-      </div>
-    </div>
+    <Droppable droppableId={status}>
+      {(provided) => (
+        <div className="kanban-column" data-status={status} {...provided.droppableProps} ref={provided.innerRef}>
+          <h2>{status} ({tickets.length})</h2>
+          <div className="ticket-list" ref={listRef}>
+            <List
+              height={500}
+              itemCount={tickets.length}
+              itemSize={120}
+              width="100%"
+            >
+              {({ index, style }) => (
+                <div style={style}>
+                  <Ticket key={tickets[index].id} ticket={tickets[index]} index={index} />
+                </div>
+              )}
+            </List>
+            {provided.placeholder}
+          </div>
+        </div>
+      )}
+    </Droppable>
   );
 };
 
 KanbanColumn.propTypes = {
   status: PropTypes.string.isRequired,
   tickets: PropTypes.array.isRequired,
+  loadMoreTickets: PropTypes.func.isRequired,
 };
 
 export default KanbanColumn;

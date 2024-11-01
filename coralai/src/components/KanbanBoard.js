@@ -1,25 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import KanbanColumn from './KanbanColumn';
-import { generateTickets } from '../utils/generateTickets';
-import useFakeTicketTransition from '../hooks/useFakeTicketTransition';
 import './KanbanBoard.css';
 
-const KanbanBoard = ({ liveMode }) => {
-  const [tickets, setTickets] = useState([]);
+const KanbanBoard = ({ tickets, liveMode, loadMoreTickets }) => {
   const statuses = ["To Do", "In Progress", "Blocked", "Done"];
-
-  useEffect(() => {
-    const generatedTickets = generateTickets();
-    setTickets(generatedTickets);
-  }, []);
-
-  useFakeTicketTransition(tickets, setTickets, liveMode);
-
-  const ticketCounts = statuses.reduce((acc, status) => {
-    acc[status] = tickets.filter(ticket => ticket.status === status).length;
-    return acc;
-  }, {});
-
   return (
     <div className="kanban-board">
       {statuses.map(status => (
@@ -27,6 +11,8 @@ const KanbanBoard = ({ liveMode }) => {
           key={status} 
           status={status} 
           tickets={tickets.filter(ticket => ticket.status === status)} 
+          liveMode={liveMode} 
+          loadMoreTickets={loadMoreTickets}
         />
       ))}
     </div>

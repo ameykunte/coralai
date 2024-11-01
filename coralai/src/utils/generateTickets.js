@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-export const generateTickets = (num = 10000) => {
+export const generateTickets = (num = 100) => {
   const statuses = ["To Do", "In Progress", "Blocked", "Done"];
   return Array.from({ length: num }, () => ({
     id: faker.string.uuid(),
