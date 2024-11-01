@@ -19,7 +19,7 @@ const KanbanColumn = ({ status, tickets }) => {
   }, [tickets, batchSize]);
 
   return (
-    <div className="kanban-column" onScroll={(e) => {
+    <div className="kanban-column" data-status={status} onScroll={(e) => {
       if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
         loadMoreTickets();
       }

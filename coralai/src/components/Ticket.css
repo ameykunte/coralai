@@ -18,4 +18,9 @@
     color: #666;
     margin: 0;
   }
+  .ticket:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+  }
   
