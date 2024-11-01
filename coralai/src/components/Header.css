@@ -1,0 +1,31 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f4f4f4;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .live-mode-toggle {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+  .ticket-counts {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .ticket-count {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
